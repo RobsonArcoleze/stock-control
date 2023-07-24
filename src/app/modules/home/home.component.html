@@ -3,8 +3,60 @@
     <div class="flex justify-content-center align-content-center text-align-center">
       <!-- LOGIN -->
       <form >
-        <p-card>
-          
+        <p-card
+          styleClass="mt-10"
+          header="Login"
+          subheader="Faça Login com sua conta existente!"
+          *ngIf="loginCard">
+
+          <div class="flex justify-content-center align-content-center text-align-center">
+            <input pInputText type="email" name="" id="" placeholder="E-mail">
+          </div>
+
+          <div class="flex justify-content-center align-content-center text-align-center mt-3">
+            <input pInputText type="password" name="" id="" placeholder="Senha">
+          </div>
+
+          <div class="card flex justify-content-center mt-3">
+            <button type="submit" pButton pRipple label="Login"></button>
+          </div>
+
+          <span class="flex justify-content-center align-content-center text-align-center mt-3 text-red-600 font-semibold"
+          (click)="loginCard = !loginCard"
+          style="cursor: pointer;">
+            Criar Conta
+          </span>
+        </p-card>
+      </form>
+
+      <!-- SIGNUP -->
+      <form >
+        <p-card
+          styleClass="mt-10"
+          header="Criar conta"
+          subheader="Crie já sua conta gratuita!"
+          *ngIf="!loginCard">
+
+          <div class="flex justify-content-center align-content-center text-align-center">
+            <input pInputText type="text" name="" id="" placeholder="Nome">
+          </div>
+          <div class="flex justify-content-center align-content-center text-align-center mt-3">
+            <input pInputText type="email" name="" id="" placeholder="E-mail">
+          </div>
+
+          <div class="flex justify-content-center align-content-center text-align-center mt-3">
+            <input pInputText type="password" name="" id="" placeholder="Senha">
+          </div>
+
+          <div class="card flex justify-content-center mt-3">
+            <button type="submit" pButton pRipple label="Criar conta"></button>
+          </div>
+
+          <span class="flex justify-content-center align-content-center text-align-center mt-3 text-red-600 font-semibold"
+          (click)="loginCard = !loginCard"
+          style="cursor: pointer;">
+            Fazer login
+          </span>
         </p-card>
       </form>
     </div>

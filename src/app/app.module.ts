@@ -22,7 +22,6 @@ import { HomeComponent } from './modules/home/home.component';
     /* ANGULAR */
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule,
 
@@ -30,7 +29,8 @@ import { HomeComponent } from './modules/home/home.component';
     CardModule,
     InputTextModule,
     ButtonModule,
-    ToastModule
+    ToastModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
