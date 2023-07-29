@@ -1,6 +1,7 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from 'primeng/api';
 import { AuthRequest } from 'src/app/models/interfaces/user/AuthRequest';
@@ -20,7 +21,8 @@ export class HomeComponent {
     private formBuilder: FormBuilder,
     private service: UserService,
     private cookieService: CookieService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router
   ){}
 
   loginForm = this.formBuilder.group({
@@ -55,10 +57,11 @@ export class HomeComponent {
         this.messageService.add({
           severity: 'error',
           summary: 'Erro',
-          detail: `Erro ao fazer login! ${JSON.stringify(err.error)}`,
+          detail: `Usuário ou senha incorreto!`,
           life: 2000,
         })
-      }
+      },
+      complete: ()=> this.router.navigate(['/dashboard'])
     })
   }
 
