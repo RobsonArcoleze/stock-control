@@ -31,6 +31,7 @@ export class DashboardHomeComponent implements OnInit, OnDestroy{
     this.getProductsData();
   }
 
+
   getProductsData(): void {
     this.productsService.getAllProducts()
     .pipe(takeUntil(this.destroy$))
