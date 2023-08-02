@@ -6,6 +6,7 @@ import { ProductsDataTransferService } from 'src/app/shared/services/products/pr
 import { GetAllProductsResponse } from 'src/app/models/interfaces/products/response/GetAllProductsResponse';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
+import { EventAction } from 'src/app/models/interfaces/event/event-action';
 
 @Component({
   selector: 'app-products-home',
@@ -57,6 +58,11 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
       }
 
     })
+  }
+
+  handleProductAction(event: EventAction):void{
+    if(event){console.log('Evento recebido: ', event);
+    }
   }
 
   ngOnDestroy(): void {
