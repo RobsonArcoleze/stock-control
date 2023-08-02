@@ -5,7 +5,7 @@ import { ProductsService } from 'src/app/services/products/products.service';
 import { ProductsDataTransferService } from 'src/app/shared/services/products/products-data-transfer.service';
 import { GetAllProductsResponse } from 'src/app/models/interfaces/products/response/GetAllProductsResponse';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { EventAction } from 'src/app/models/interfaces/event/event-action';
 
 @Component({
@@ -22,7 +22,8 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
     private productService: ProductsService,
     private productsDtService: ProductsDataTransferService,
     private router: Router,
-    private msg: MessageService
+    private msg: MessageService,
+    private confirmationService: ConfirmationService
   ){}
 
   ngOnInit(): void {
@@ -62,6 +63,48 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
 
   handleProductAction(event: EventAction):void{
     if(event){console.log('Evento recebido: ', event);
+    }
+  }
+
+  handleDeleteProductAction(event: {product_id: string, productName: string}): void{
+    if(event){
+      this.confirmationService.confirm({
+        message: `Confirma a exclusão do produto ${event.productName}?`,
+        header: 'Confirmação de exclusão',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Sim',
+        rejectLabel: 'Não',
+        accept: () => this.deleteProduct(event.product_id)
+      })
+    }
+  }
+
+  deleteProduct(product_id: string) {
+    if(product_id){
+      this.productService.deleteProduct(product_id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response)=> {
+          if(response){
+            this.msg.add({
+              severity: 'success',
+              summary: 'Sucesso',
+              detail: 'Produto Removido com sucesso',
+              life: 3000
+            })
+            this.getAPIProductsData();
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log(err);
+          this.msg.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: `Erro ao deletar produto: ${err.error}`,
+            life: 3000
+          });
+        }
+      })
     }
   }
 
