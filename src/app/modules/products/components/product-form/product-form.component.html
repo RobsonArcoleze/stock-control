@@ -4,7 +4,7 @@
     <div class="flex flex-column md:flex-column gap-3">
 
       <!-- NOME DO PRODUTO -->
-      <input pInputText pInputText placeholder="Nome" formControlName="name">
+      <input pInputText placeholder="Nome" formControlName="name">
 
       <!-- CATEGORIA DO PRODUTO -->
       <p-dropdown
@@ -14,26 +14,26 @@
         optionLabel="name"
         optionValue="id"
         placeholder="Selecione uma categoria"
-        formControlName="categoria_id"
+        formControlName="category_id"
       ></p-dropdown>
 
       <!-- PREÇO DO PRODUTO -->
-      <input pInputText  placeholder="Preço" formControlName="price">
+      <input pInputText placeholder="Preço" formControlName="price">
 
       <!-- DESCRIÇÃO DO PRODUTO -->
       <input pInputText  placeholder="Descrição" formControlName="description">
 
       <!-- QUANTIDADE DO PRODUTO -->
-      <input pInputNumber placeholder="Quantidade" formControlName="amount">
+      <input pInputText placeholder="Quantidade" formControlName="amount">
 
       <div class="flex flex-row justify-content-center align-items-center m-1">
         <p-button
-          [disabled]="addProductForm.invalid"
+          [disabled]="!addProductForm.valid"
           type="submit"
           label="Concluir"
         ></p-button>
       </div>
-      
+
     </div>
   </form>
 </div>

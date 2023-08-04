@@ -1,3 +1,4 @@
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Route, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
@@ -7,6 +8,7 @@ import { GetAllProductsResponse } from 'src/app/models/interfaces/products/respo
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { EventAction } from 'src/app/models/interfaces/event/event-action';
+import { ProductFormComponent } from '../../components/product-form/product-form.component';
 
 @Component({
   selector: 'app-products-home',
@@ -16,6 +18,7 @@ import { EventAction } from 'src/app/models/interfaces/event/event-action';
 export class ProductsHomeComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject();
+  private ref!: DynamicDialogRef;
   public productList: GetAllProductsResponse[] = [];
 
   constructor(
@@ -23,7 +26,8 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
     private productsDtService: ProductsDataTransferService,
     private router: Router,
     private msg: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private dialogService: DialogService
   ){}
 
   ngOnInit(): void {
@@ -62,7 +66,24 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
   }
 
   handleProductAction(event: EventAction):void{
-    if(event){console.log('Evento recebido: ', event);
+    if(event){
+      this.ref = this.dialogService.open(ProductFormComponent, {
+        header: event?.action,
+        width: '70%',
+        contentStyle: { overflow: 'auto'},
+        baseZIndex: 10000,
+        maximizable: true,
+        data: {
+          event: event,
+          productList: this.productList,
+        },
+
+      });
+      this.ref.onClose
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: ()=> this.getAPIProductsData()
+      })
     }
   }
 

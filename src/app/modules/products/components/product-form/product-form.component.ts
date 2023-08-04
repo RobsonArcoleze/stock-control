@@ -5,7 +5,9 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { GetCategoriesResponse } from 'src/app/models/interfaces/categories/responses/GetCategoriesResponse';
+import { CreateProductRequest } from 'src/app/models/interfaces/products/request/CreateProductRequest';
 import { CategoriesService } from 'src/app/services/categories/categories.service';
+import { ProductsService } from 'src/app/services/products/products.service';
 
 @Component({
   selector: 'app-product-form',
@@ -20,10 +22,10 @@ export class ProductFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private categoriesService: CategoriesService,
+    private productsService: ProductsService,
     private formBuilder: FormBuilder,
     private msg: MessageService,
     private router: Router,
-
   ){}
 
   public addProductForm = this.formBuilder.group({
@@ -56,19 +58,41 @@ export class ProductFormComponent implements OnInit, OnDestroy {
           life: 3000
         });
       },
-      complete: () =>{
-        this.msg.add({
-          severity: 'success',
-          summary: 'Sucesso',
-          detail: 'Categorias listadas com sucesso',
-          life: 3000
-        })
-      }
     })
   }
 
   handleSubmitAddProduct(): void {
-    throw new Error('Method not implemented.');
+    if(this.addProductForm?.value && this.addProductForm?.valid){
+      const requestCreateProduct: CreateProductRequest = {
+        name: this.addProductForm.value.name as string,
+        price: this.addProductForm.value.price as string,
+        description: this.addProductForm.value.description as string,
+        category_id: this.addProductForm.value.category_id as string,
+        amount: Number(this.addProductForm.value.amount)
+      }
+      this.productsService.crreatProduct(requestCreateProduct)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          error: (err: HttpErrorResponse) => {
+            console.log(err);
+            this.msg.add({
+              severity: 'error',
+              summary: 'Erro',
+              detail: `Erro ao criar Produto: ${err.error}`,
+              life: 3000
+            });
+          },
+          complete: () =>{
+            this.msg.add({
+              severity: 'success',
+              summary: 'Sucesso',
+              detail: 'Produto criado com sucesso',
+              life: 3000
+            })
+          }
+        })
+    }
+    this.addProductForm.reset();
   }
 
   ngOnDestroy(): void {
