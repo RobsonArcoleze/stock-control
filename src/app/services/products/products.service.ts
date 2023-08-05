@@ -4,6 +4,7 @@ import { environment } from 'environments/environments.prod';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable, map } from 'rxjs';
 import { CreateProductRequest } from 'src/app/models/interfaces/products/request/CreateProductRequest';
+import { EditProductResquest } from 'src/app/models/interfaces/products/request/EditProductRequest';
 import { CreateProductResponse } from 'src/app/models/interfaces/products/response/CreateProductResponse';
 import { DeleteProductResponse } from 'src/app/models/interfaces/products/response/DeleteProductResponse';
 import { GetAllProductsResponse } from 'src/app/models/interfaces/products/response/GetAllProductsResponse';
@@ -44,5 +45,9 @@ export class ProductsService {
 
   crreatProduct(requestDatas: CreateProductRequest): Observable<CreateProductResponse>{
     return this.http.post<CreateProductResponse>(`${this.API_URL}/product`, requestDatas, this.httpOptions)
+  }
+
+  editProduct(requestDatas: EditProductResquest): Observable<void>{
+    return this.http.put<void>(`${this.API_URL}/product/edit`, requestDatas, this.httpOptions)
   }
 }
