@@ -4,6 +4,7 @@ export interface EditProductResquest{
   description: string;
   product_id: string;
   amount: number;
+  category_id: string;
 }
 
 

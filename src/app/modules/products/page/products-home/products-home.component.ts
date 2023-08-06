@@ -37,15 +37,15 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
   getServiceProductsdata() {
     const productsLoaded = this.productsDtService.getProductsData();
 
-    (productsLoaded.length > 0)? this.productList = productsLoaded
-                               : this.getAPIProductsData();
+    if(productsLoaded.length > 0){
+      this.productList = productsLoaded
+    }else this.getAPIProductsData();
+
   }
 
   getAPIProductsData() {
     this.productService.getAllProducts()
-    .pipe(
-      takeUntil(this.destroy$)
-    )
+    .pipe(takeUntil(this.destroy$))
     .subscribe({
       next: (response) => {
         if(response.length > 0){
@@ -60,12 +60,14 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
           detail: `Erro ao buscar produtos: ${err.error}`,
           life: 3000
         });
+        this.router.navigate(['/dashboard']);
       }
 
     })
   }
 
   handleProductAction(event: EventAction):void{
+
     if(event){
       this.ref = this.dialogService.open(ProductFormComponent, {
         header: event?.action,

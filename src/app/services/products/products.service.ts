@@ -43,7 +43,7 @@ export class ProductsService {
     })
   }
 
-  crreatProduct(requestDatas: CreateProductRequest): Observable<CreateProductResponse>{
+  creatProduct(requestDatas: CreateProductRequest): Observable<CreateProductResponse>{
     return this.http.post<CreateProductResponse>(`${this.API_URL}/product`, requestDatas, this.httpOptions)
   }
 
