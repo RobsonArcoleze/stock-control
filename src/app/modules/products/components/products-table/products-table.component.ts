@@ -1,7 +1,7 @@
-import { ProductEvent } from './../../../../models/enums/Products-event';
+import { ProductEvent } from '../../../../models/enums/products/Products-event';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DeleteProductAction } from 'src/app/models/interfaces/event/delete-product-action';
-import { EventAction } from 'src/app/models/interfaces/event/event-action';
+import { DeleteProductAction } from 'src/app/models/interfaces/products/event/delete-product-action';
+import { EventAction } from 'src/app/models/interfaces/products/event/event-action';
 import { GetAllProductsResponse } from 'src/app/models/interfaces/products/response/GetAllProductsResponse';
 
 @Component({

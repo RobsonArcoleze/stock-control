@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environments.prod';
 import { CookieService } from 'ngx-cookie-service';
@@ -28,5 +28,13 @@ export class CategoriesService {
     return this.http.get<GetCategoriesResponse[]>(
       `${this.API_URL}/categories`, this.httpOptions
     )
+  }
+
+  deleteCategory(requestDatas: {category_id: string}): Observable<void>{
+    return this.http.delete<void>(`${this.API_URL}/category/delete`, {
+      ...this.httpOptions, params: {
+        category_id: requestDatas.category_id
+      }
+    })
   }
 }

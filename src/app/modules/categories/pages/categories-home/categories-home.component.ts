@@ -6,6 +6,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { GetCategoriesResponse } from 'src/app/models/interfaces/categories/responses/GetCategoriesResponse';
 import { HttpErrorResponse } from '@angular/common/http';
+import { DeleteCategoryAction } from 'src/app/models/interfaces/categories/event/DeleteCategoryAction';
 
 @Component({
   selector: 'app-categories-home',
@@ -50,6 +51,46 @@ export class CategoriesHomeComponent implements OnInit,  OnDestroy{
           }
       })
   }
+
+  handleDeletecategoryAction(event: DeleteCategoryAction): void{
+    if(event){
+      this.confirmationService.confirm({
+        header: 'Confirmação de exclusão',
+        message: `Confirma a exclusão da Categoria: ${event?.categoryName}`,
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Sim',
+        rejectLabel: 'Não',
+        accept: () =>this.deleteCategory(event?.category_id)
+      })
+    }
+  }
+  deleteCategory(category_id: string): void {
+    if(category_id){
+      this.catService.deleteCategory({category_id})
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          error: (err: HttpErrorResponse)=>{
+            this.msg.add({
+              severity: 'error',
+              summary: 'Erro',
+              detail: `Erro ao Deletar a categoria ${err.name}: ${err.message}`,
+              life: 3000
+            });
+            this.getAllCategories();
+          },
+          complete: () =>{
+            this.getAllCategories();
+            this.msg.add({
+              severity: 'success',
+              summary: 'Sucesso',
+              detail: `Categoria excluida com sucesso!}`,
+              life: 3000
+            });
+          }
+        })
+    }
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

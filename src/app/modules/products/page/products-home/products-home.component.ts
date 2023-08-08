@@ -7,7 +7,7 @@ import { ProductsDataTransferService } from 'src/app/shared/services/products/pr
 import { GetAllProductsResponse } from 'src/app/models/interfaces/products/response/GetAllProductsResponse';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { EventAction } from 'src/app/models/interfaces/event/event-action';
+import { EventAction } from 'src/app/models/interfaces/products/event/event-action';
 import { ProductFormComponent } from '../../components/product-form/product-form.component';
 
 @Component({
