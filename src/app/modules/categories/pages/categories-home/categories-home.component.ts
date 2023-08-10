@@ -1,4 +1,4 @@
-import { DialogService } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { CategoriesService } from 'src/app/services/categories/categories.service';
@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { GetCategoriesResponse } from 'src/app/models/interfaces/categories/responses/GetCategoriesResponse';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DeleteCategoryAction } from 'src/app/models/interfaces/categories/event/DeleteCategoryAction';
+import { EditCategoryAction } from 'src/app/models/interfaces/categories/event/EditCategoryAction';
+import { CategoryFormComponent } from '../../components/category-form/category-form.component';
 
 @Component({
   selector: 'app-categories-home',
@@ -15,8 +17,10 @@ import { DeleteCategoryAction } from 'src/app/models/interfaces/categories/event
 })
 export class CategoriesHomeComponent implements OnInit,  OnDestroy{
 
+
   private readonly destroy$: Subject<void> = new Subject();
   public categoryDatas: GetCategoriesResponse[] = [];
+  private ref!: DynamicDialogRef;
 
   constructor(
     private catService: CategoriesService,
@@ -31,6 +35,7 @@ export class CategoriesHomeComponent implements OnInit,  OnDestroy{
   ngOnInit(): void {
     this.getAllCategories()
   }
+
   getAllCategories() {
     this.catService.getAllCategories()
       .pipe(takeUntil(this.destroy$))
@@ -64,6 +69,27 @@ export class CategoriesHomeComponent implements OnInit,  OnDestroy{
       })
     }
   }
+
+  handleCategoryAction(event: EditCategoryAction) {
+    if(event){
+      this.ref = this.dialogService.open(CategoryFormComponent, {
+        header: event.action,
+        width: '70%',
+        contentStyle: { overflow: 'auto' },
+        baseZIndex: 10000,
+        maximizable: true,
+         data: {
+          event: event,
+         }
+      });
+      this.ref.onClose
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => this.getAllCategories()
+      });
+    }
+    }
+
   deleteCategory(category_id: string): void {
     if(category_id){
       this.catService.deleteCategory({category_id})
